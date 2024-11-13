@@ -70,4 +70,14 @@ def progr(user_id: int,user_para: int, kol: int):
     cursor.execute('UPDATE users SET progr_otn = ? WHERE user_id = ?', (col, user_para))
     sqlite_connection.commit()
     sqlite_connection.close()
-#подмена элемента
+#прогресс отношений
+
+def del_otn(user_id: int, user_id2: int):
+    sqlite_connection = sqlite3.connect('bd/bd1/bd')
+    cursor = sqlite_connection.cursor()
+    start_log()
+    cursor.execute('UPDATE users SET para_id = ? WHERE user_id = ?', (None, user_id))
+    cursor.execute('UPDATE users SET para_id = ? WHERE user_id = ?', (None, user_id2))
+    sqlite_connection.commit()
+    sqlite_connection.close()
+#удаление отн

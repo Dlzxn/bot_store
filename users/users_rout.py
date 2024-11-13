@@ -10,7 +10,7 @@ import os
 import sqlite3
 import telebot
 from aiogram.types import FSInputFile
-from defs.defd import ref_prov, db_table_val, from_bd, zamena_para, progr
+from defs.defd import ref_prov, db_table_val, from_bd, zamena_para, progr, del_otn
 from aiogram.utils.deep_linking import create_start_link, decode_payload
 from aiogram import types
 import base64
@@ -112,3 +112,9 @@ async def process_button_buy_press(callback: CallbackQuery):
                 reply_markup=keyboard_menu_otn
         )
     await callback.answer()
+
+@router.callback_query(F.data=="button_del_otn")
+async def start_cm(callback: CallbackQuery):
+    print(callback.from_user.id)
+    del_otn(callback.from_user.id, from_bd(4, callback.from_user.id))
+    await callback.answer(f'Отношения удалены💔')
