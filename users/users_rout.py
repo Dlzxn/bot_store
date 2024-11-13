@@ -82,7 +82,6 @@ async def start_cm(callback: CallbackQuery):
                             reply_markup=keyboard_menu_true)
 
 
-
 #кнопка соззать отношения
 @router.callback_query(F.data=='button_new_otn')
 async def mt_referal_menu (callback: CallbackQuery, state: FSMContext, bot: Bot):
@@ -99,12 +98,14 @@ async def mt_referal_menu (callback: CallbackQuery, state: FSMContext, bot: Bot)
 
 #смена кнопки по проходу меню-отношения-----------------edit
 @router.callback_query(F.data=='button_my_otn')
-async def process_button_buy_press(callback: CallbackQuery):
+async def process_button_buy_press(callback: CallbackQuery, bot: Bot):
     if callback.message.text != "Ваши отношения":
         if from_bd(4, callback.from_user.id):
+            user=await bot.get_chat(from_bd(4, callback.from_user.id))
+            first_name=user.first_name
             await callback.message.edit_caption(
                 caption=f'Ваши отношения:\n'
-                f'Ваша пара {from_bd(1, callback.from_user.id)}\n'
+                f'Ваша пара: {first_name}\n'
                 f'Уровень отношений: {from_bd(6, callback.from_user.id)}\n'
                 f'Прогресс: {from_bd(5, callback.from_user.id)}\n'
                 f'Любовь творит чудеса!\n'
@@ -113,8 +114,19 @@ async def process_button_buy_press(callback: CallbackQuery):
         )
     await callback.answer()
 
+#удаление отн
 @router.callback_query(F.data=="button_del_otn")
 async def start_cm(callback: CallbackQuery):
     print(callback.from_user.id)
     del_otn(callback.from_user.id, from_bd(4, callback.from_user.id))
     await callback.answer(f'Отношения удалены💔')
+
+
+#чмок
+@router.callback_query(F.data=="button_chmok")
+async def chmok_inline(callback: CallbackQuery, bot: Bot):
+    progr(callback.from_user.id, from_bd(4, callback.from_user.id), 5)
+    await callback.answer(f'Вы поцеловали свою половинку❤️\n\n'
+                          f'Прогресс отношений: +5'
+                          )
+    await bot.send_message(from_bd(4, callback.from_user.id), "❤️Ваш партнер вас поцеловал❤️")
